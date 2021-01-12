@@ -1,38 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import BlogList from "./BlogList";
+import useFetch from "../useFetch";
 
 const Home = () => {
-  const [blogs, setBlogs] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  const [name, setName] = useState("mario");
+  // use custom hook
+  const { data: blogs, isLoading, error } = useFetch(
+    "https://jsonplaceholder.typicode.com/posts?_limit=5"
+  );
 
   // const deleteBlog = (id) => {
   //   const newBlogs = blogs.filter((blog) => blog.id !== id);
   //   setBlogs(newBlogs);
   // };
-
-  useEffect(() => {
-    setTimeout(() => {
-      fetch("https://jsonplaceholder.typicode.com/posts?_limit=5")
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Could not fetch the data for that resource");
-          }
-          return response.json();
-        })
-        .then((data) => {
-          setBlogs(data);
-          setIsLoading(false);
-          setError(null);
-        })
-        .catch((err) => {
-          setIsLoading(false);
-          setError(err.message);
-        });
-    }, 1000);
-  }, []);
 
   return (
     <div className="home">
